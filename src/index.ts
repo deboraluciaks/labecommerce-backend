@@ -1,51 +1,67 @@
 import { products, users } from "./database";
 import { TProducts, TUsers } from "./types";
+import express, { Request, Response } from 'express';
+import cors from 'cors';
 
-export function createUser(){
+const app = express();
+
+app.use(express.json());
+app.use(cors());
+
+app.listen(3003, () => {
+    console.log("Servidor rodando na porta 3003");
+});
+
+//teste
+
+app.get("/ping", (req: Request, res: Response) => {
+    res.send("Pong!");
+});
+
+
+export const getAllUsers = () => {
+    
+    return (users)
+}
+
+
+export function getAllProducts(){
+
+    return (products)
+}
+
+
+export const createUser = (id: string, name: string, email: string, password: string) => {
     const newUser:TUsers =  {
-        id: "u003",
-        name: "Astrodev",
-        email: "astrodev@email.com",
-        password: "astrodev99",
+        id,
+        name,
+        email,
+        password,
         createdAt: new Date().toISOString()
     }
 
     users.push(newUser)      
 
-    return (
-        console.log("Cadastro realizado com sucesso")
-    )
+    return ("Cadastro realizado com sucesso!")
 }
 
-export function getAllUsers(){
 
-    return (
-        console.log(users)
-    )
-}
-
-export function createProduct(){
+export const createProduct = (id: string, name: string, price: number, description: string, imageUrl: string) => {
     const newProduct:TProducts =  {
-        id: "prod003",
-        name: "SSD gamer",
-        price: 349.99,
-        description: "Acelere seu sistema com velocidades incríveis de leitura e gravação.",
-        imageUrl: "https://www.amazon.com.br/Samsung-S%C3%A9rie-970-EVO-Plus/dp/B07MFZXR1B"
+        id,
+        name,
+        price,
+        description,
+        imageUrl
     }
+    
 
     products.push(newProduct)      
 
-    return (
-        console.log("Produto adicionado com sucesso")
-    )
+    return ("Produto adicionado com sucesso!")
 }
 
-export function getAllProducts(){
 
-    return (
-        console.log(products)
-    )
-}
 
 export const searchProductsByName = (name: string)  => {
 
@@ -58,4 +74,52 @@ export const searchProductsByName = (name: string)  => {
 }
 
 
-console.table(searchProductsByName("monitor"))
+//API
+
+app.get("/users", (req: Request, res: Response) => {
+    res.status(200).send(users);
+});
+
+
+
+app.get("/products", (req: Request, res: Response) => {
+    const findName = req.query.name as string
+
+    if (findName) {
+        
+        const result = searchProductsByName(findName)
+
+        res.status(200).send(result);
+        
+    } else {
+        res.status(200).send(products);
+    }
+
+});
+
+app.post("/user", (req: Request, res: Response) => {
+    const id = req.body.id as string
+	const name = req.body.name as string
+	const email = req.body.email as string
+    const password = req.body.password as string
+
+    const result = createUser(id, name, email, password)
+
+    res.status(201).send(result);
+
+});
+
+app.post("/product", (req: Request, res: Response) => {
+    const id = req.body.id as string
+	const name = req.body.name as string
+	const price = req.body.price as number
+    const description = req.body.description as string
+    const imageUrl = req.body.imageUrl as string
+
+
+    const result = createProduct(id, name, price, description, imageUrl)
+
+    res.status(201).send(result);
+
+});
+
