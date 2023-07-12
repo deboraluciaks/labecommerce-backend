@@ -107,6 +107,52 @@ WHERE id = 'prod001';
 DELETE FROM products
 WHERE id = 'prod001';
 
---Deleta-tabela
+--Deleta-tabela-products
 
 DROP TABLE products;
+
+
+--PEDIDOS
+
+--Cria tabela
+CREATE TABLE purchases (
+    id TEXT PRIMARY KEY UNIQUE NOT NULL,
+    buyer TEXT NOT NULL,
+    total_price REAL NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (buyer) REFERENCES users(id)
+);
+
+INSERT INTO purchases (id, buyer, total_price, created_at)
+    VALUES
+        ('prc001', 'u001', 680, datetime('now')),
+        ('prc002', 'u002', 700, datetime('now')),
+        ('prc003', 'u003', 850, datetime('now'));
+
+--GetPurchases  
+
+SELECT * FROM purchases;
+
+--JOIN purchases X users
+
+SELECT
+    purchases.id,
+    purchases.buyer,
+    users.name,
+    users.email,
+    purchases.total_price,
+    purchases.created_at
+FROM users
+INNER JOIN purchases
+ON purchases.buyer = users.id;
+
+--edit-purchase
+
+UPDATE purchases
+SET 
+    total_price = 780
+WHERE id = 'prc001';
+
+--Deleta-tabela-purchases
+
+DROP TABLE purchases;
