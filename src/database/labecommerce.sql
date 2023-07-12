@@ -12,7 +12,7 @@ CREATE TABLE users (
     created_at TEXT NOT NULL
 );
 
---Retorna-itens-tabela
+--GetAllUsers
 
 SELECT * FROM users;
 
@@ -20,7 +20,7 @@ SELECT * FROM users;
 
 PRAGMA table_info('users');
 
---Adiciona-itens-tabela
+--createUser
 
 INSERT INTO users (id, name, email, password, created_at)
     VALUES
@@ -28,13 +28,15 @@ INSERT INTO users (id, name, email, password, created_at)
         ('u002','Beltrana','beltrana@email.com','beltrana00', date ('now')),
         ('u003','Ciclano','ciclano@email.com','ciclo4321', date ('now'));
 
---Edit-user
+--E
+
+--editUserById
 
 UPDATE users
 SET email = 'fulano1990@email.com'
 WHERE id = 'u001';
 
---Deleta-user-tabela
+--deleteUserById
 
 DELETE FROM users
 WHERE id = 'u001';
@@ -56,9 +58,20 @@ CREATE TABLE products (
     image_url TEXT NOT NULL
 );
 
---Retorna-itens-tabela
+--getAllProducts
 
 SELECT * FROM products;
+
+--getProductsById
+
+SELECT * FROM products
+WHERE id = 'prod003';
+
+
+--getProductsByName
+
+SELECT * FROM products
+WHERE name LIKE '%gamer%';
 
 --Retorna-estrutura-tabela
 
@@ -72,15 +85,24 @@ INSERT INTO products (id, name, price, description, image_url)
         ('prod002','Monitor',900,'Monitor LED Full HD 24 polegadas','https://picsum.photos/seed/Monitor/400'),
         ('prod003','Teclado',520,'Teclado mecânico', 'https://cdnx.jumpseller.com/centralgamer/image/9316710/thumb/610/610?1662230966'),
         ('prod004','Gabinete',200,'Gabinete gamer', 'https://cdn.awsli.com.br/600x450/404/404053/produto/205902790/gabinete-furia-swpqdg.jpg'),
-        ('prod005','Controle',480,'Controle DualShock PS4','https://cdn.awsli.com.br/800x800/2394/2394811/produto/172073866fb2d6142d3.jpg');
+        ('prod005','Controle gamer',480,'Controle DualShock PS4','https://cdn.awsli.com.br/800x800/2394/2394811/produto/172073866fb2d6142d3.jpg');
 
---Edit-product
+--editProductById
 
 UPDATE products
 SET price = 300
+WHERE id = 'prod002';
+
+UPDATE products
+SET 
+    id = 'prodteste',
+    name = 'teste',
+    price = 300,
+    description = 'testando edição do produto',
+    image_url = 'https://cdn.awsli.com.br/600x450/404/404053/produto/205902790/gabinete-furia-swpqdg.jpg'
 WHERE id = 'prod001';
 
---Deleta-product-tabela
+--deleteProductById
 
 DELETE FROM products
 WHERE id = 'prod001';
