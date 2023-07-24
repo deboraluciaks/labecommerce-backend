@@ -1,4 +1,3 @@
-import { products, users } from "./database";
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { db } from "./database/knex"
@@ -263,7 +262,6 @@ app.post("/product", async (req: Request, res: Response) => {
 
         const newId = await getAllProd(id)
 
-
         if (newId) {
             res.status(404)
             throw new Error("Esse produto ja existe!")
@@ -394,6 +392,7 @@ app.post("/purchases", async (req: Request, res: Response) => {
         }
 
         const result = await createPurchase(id, buyer, totalPrice)
+        console.table(totalPrice)
 
         const purchaseProds = []
 
