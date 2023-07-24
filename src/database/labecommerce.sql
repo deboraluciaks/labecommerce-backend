@@ -3,7 +3,6 @@
 --USERS
 
 --Cria tabela
-
 CREATE TABLE users (
     id TEXT PRIMARY KEY UNIQUE NOT NULL,
     name TEXT NOT NULL,
@@ -16,36 +15,18 @@ CREATE TABLE users (
 
 SELECT * FROM users;
 
---Retorna-estrutura-tabela
-
-PRAGMA table_info('users');
-
 --createUser
 
 INSERT INTO users (id, name, email, password, created_at)
     VALUES
         ('u001','Fulano','fulano@email.com','fulano123', date ('now')),
         ('u002','Beltrana','beltrana@email.com','beltrana00', date ('now')),
-        ('u003','Ciclano','ciclano@email.com','ciclo4321', date ('now'));
-
---E
-
---editUserById
-
-UPDATE users
-SET email = 'fulano1990@email.com'
-WHERE id = 'u001';
-
---deleteUserById
-
-DELETE FROM users
-WHERE id = 'u001';
+        ('u003','Ciclano','ciclano@email.com','ciclo4321', date ('now')),
+        ('u004','Dilano','didi@email.com','dii048', date ('now'));
 
 --Deleta-tabela
 
 DROP TABLE users;
-
-
 
 --PRODUCTS
 
@@ -59,23 +40,7 @@ CREATE TABLE products (
 );
 
 --getAllProducts
-
 SELECT * FROM products;
-
---getProductsById
-
-SELECT * FROM products
-WHERE id = 'prod003';
-
-
---getProductsByName
-
-SELECT * FROM products
-WHERE name LIKE '%gamer%';
-
---Retorna-estrutura-tabela
-
-PRAGMA table_info('products');
 
 --Adiciona-itens-tabela
 
@@ -84,33 +49,13 @@ INSERT INTO products (id, name, price, description, image_url)
         ('prod001','Mouse gamer',250,'Melhor mouse do mundo!', 'https://picsum.photos/seed/Mouse%20gamer/400'),
         ('prod002','Monitor',900,'Monitor LED Full HD 24 polegadas','https://picsum.photos/seed/Monitor/400'),
         ('prod003','Teclado',520,'Teclado mecânico', 'https://cdnx.jumpseller.com/centralgamer/image/9316710/thumb/610/610?1662230966'),
-        ('prod004','Gabinete',200,'Gabinete gamer', 'https://cdn.awsli.com.br/600x450/404/404053/produto/205902790/gabinete-furia-swpqdg.jpg'),
-        ('prod005','Controle gamer',480,'Controle DualShock PS4','https://cdn.awsli.com.br/800x800/2394/2394811/produto/172073866fb2d6142d3.jpg');
-
---editProductById
-
-UPDATE products
-SET price = 300
-WHERE id = 'prod002';
-
-UPDATE products
-SET 
-    id = 'prodteste',
-    name = 'teste',
-    price = 300,
-    description = 'testando edição do produto',
-    image_url = 'https://cdn.awsli.com.br/600x450/404/404053/produto/205902790/gabinete-furia-swpqdg.jpg'
-WHERE id = 'prod001';
-
---deleteProductById
-
-DELETE FROM products
-WHERE id = 'prod001';
+        ('prod004','Teclado gatinho',520,'Miau miau', 'https://ae01.alicdn.com/kf/H6c564e4b8f47413e9a91fe5619378dd9G.jpg_640x640Q90.jpg_.webp'),
+        ('prod005','Gabinete',200,'Gabinete gamer', 'https://cdn.awsli.com.br/600x450/404/404053/produto/205902790/gabinete-furia-swpqdg.jpg'),
+        ('prod006','Controle gamer',480,'Controle DualShock PS4','https://cdn.awsli.com.br/800x800/2394/2394811/produto/172073866fb2d6142d3.jpg');
 
 --Deleta-tabela-products
 
 DROP TABLE products;
-
 
 --PEDIDOS
 
@@ -127,36 +72,15 @@ INSERT INTO purchases (id, buyer, total_price, created_at)
     VALUES
         ('prc001', 'u001', 680, datetime('now')),
         ('prc002', 'u002', 700, datetime('now')),
-        ('prc003', 'u003', 850, datetime('now'));
+        ('prc003', 'u001', 850, datetime('now'));
 
 --GetPurchases  
 
 SELECT * FROM purchases;
 
---JOIN purchases X users
-
-SELECT
-    purchases.id,
-    purchases.buyer,
-    users.name,
-    users.email,
-    purchases.total_price,
-    purchases.created_at
-FROM users
-INNER JOIN purchases
-ON purchases.buyer = users.id;
-
---edit-purchase
-
-UPDATE purchases
-SET 
-    total_price = 780
-WHERE id = 'prc001';
-
 --Deleta-tabela-purchases
 
 DROP TABLE purchases;
-
 
 
 --createTable (relação purchases x products)
@@ -165,7 +89,9 @@ CREATE TABLE purchases_products (
     purchase_id TEXT NOT NULL,
     product_id TEXT NOT NULL,
     quantity INTEGER NOT NULL,
-    FOREIGN KEY (purchase_id) REFERENCES purchases(id),
+    FOREIGN KEY (purchase_id) REFERENCES purchases(id)
+        ON UPDATE CASCADE
+		ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id)
         ON UPDATE CASCADE
 		ON DELETE CASCADE
@@ -183,21 +109,6 @@ INSERT INTO purchases_products (purchase_id, product_id, quantity)
         ('prc002', 'prod002', 5),
         ('prc003', 'prod004', 1);
 
-
-SELECT
-    purchases.id AS purchaseId,
-    products.id AS productId,
-    products.name AS productName,
-    quantity,
-    purchases.buyer AS purchaseBuyer
-
-FROM purchases_products
-
-INNER JOIN purchases
-ON purchases_products.purchase_id = purchases.id
-
-INNER JOIN products
-ON purchases_products.product_id = products.id;
 
 --Deleta-purchases_products
 
